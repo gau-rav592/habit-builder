@@ -2,12 +2,23 @@ from flask import Flask, request, jsonify
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from models.user_model import create_users_table, add_user, find_user_by_email
+from datetime import timedelta
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app, supports_credentials=True, resources={
+    r"/*": {
+        "origins": ["http://localhost:3000"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    }
+})
 bcrypt = Bcrypt(app)
 
 # Secret key for JWT (move to env in production)
 app.config['JWT_SECRET_KEY'] = "super-secret-key"
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 jwt = JWTManager(app)
 
 # Create users table on startup
@@ -59,7 +70,7 @@ def login():
 @app.route("/profile")
 @jwt_required()
 def profile():
-    current_user = get_jwt_identity()
+    current_user = get_jwt_identity() #email stored as identity
     return jsonify({"msg": "You are authenticated!", "user": current_user})
 
 if __name__ == "__main__":

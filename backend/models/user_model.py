@@ -1,6 +1,9 @@
 import sqlite3
+import os
 
-DB_FILE = "database.db"
+# Absolute path to backend/database.db
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))   # backend/models
+DB_FILE = os.path.join(BASE_DIR, "..", "database.db")   # backend/database.db
 
 def create_users_table():
     conn = sqlite3.connect(DB_FILE)
