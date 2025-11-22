@@ -14,8 +14,10 @@ function Signup() {
       return;
     }
 
+    const API = process.env.REACT_APP_API_URL || "http://127.0.0.1:5000";
+
     try {
-      const res = await fetch("http://127.0.0.1:5000/signup", {
+      const res = await fetch(`${API}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

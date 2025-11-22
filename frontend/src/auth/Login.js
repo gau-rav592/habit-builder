@@ -8,8 +8,10 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    const API = process.env.REACT_APP_API_URL || "http://127.0.0.1:5000";
+
     try {
-      const res = await fetch("http://127.0.0.1:5000/login", {
+      const res = await fetch(`${API}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

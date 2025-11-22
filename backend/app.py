@@ -3,13 +3,16 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from models.user_model import create_users_table, add_user, find_user_by_email
 from datetime import timedelta
+import os
 from flask_cors import CORS
 
 app = Flask(__name__)
 
+FRONTEND_URL = OS.ENVIRON.GET("FRONTEND_URL", "http://localhost:3000")
+
 CORS(app, supports_credentials=True, resources={
     r"/*": {
-        "origins": ["http://localhost:3000"],
+        "origins": [FRONTEND_URL],
         "allow_headers": ["Content-Type", "Authorization"],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     }
