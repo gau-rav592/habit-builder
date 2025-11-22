@@ -5,10 +5,12 @@ from models.user_model import create_users_table, add_user, find_user_by_email
 from datetime import timedelta
 import os
 from flask_cors import CORS
+from dotenv import load_dotenv
 
+load_dotenv()
 app = Flask(__name__)
 
-FRONTEND_URL = os.ENVIRON.GET("FRONTEND_URL", "http://localhost:3000")
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")
 
 CORS(app, supports_credentials=True, resources={
     r"/*": {
@@ -20,7 +22,7 @@ CORS(app, supports_credentials=True, resources={
 bcrypt = Bcrypt(app)
 
 # Secret key for JWT (move to env in production)
-app.config['JWT_SECRET_KEY'] = "super-secret-key"
+app.config['JWT_SECRET_KEY'] = os.environ.get("JWT_SECRET_KEY")
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 jwt = JWTManager(app)
 
