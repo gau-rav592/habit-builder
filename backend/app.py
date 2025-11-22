@@ -8,7 +8,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 
-FRONTEND_URL = OS.ENVIRON.GET("FRONTEND_URL", "http://localhost:3000")
+FRONTEND_URL = os.ENVIRON.GET("FRONTEND_URL", "http://localhost:3000")
 
 CORS(app, supports_credentials=True, resources={
     r"/*": {
