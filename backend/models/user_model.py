@@ -1,34 +1,11 @@
-import sqlite3
-import os
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
-# Absolute path to backend/database.db
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))   # backend/models
-DB_FILE = os.path.join(BASE_DIR, "..", "database.db")   # backend/database.db
+db = SQLAlchemy()
 
-def create_users_table():
-    conn = sqlite3.connect(DB_FILE)
-    cursor = conn.cursor()
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
-    )
-    """)
-    conn.commit()
-    conn.close()
-
-def add_user(email, password_hash):
-    conn = sqlite3.connect(DB_FILE)
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO users (email, password) VALUES (?, ?)", (email, password_hash))
-    conn.commit()
-    conn.close()
-
-def find_user_by_email(email):
-    conn = sqlite3.connect(DB_FILE)
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
-    user = cursor.fetchone()
-    conn.close()
-    return user
+class User(db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
